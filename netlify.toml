@@ -1,0 +1,13 @@
+# Netlify configuration for Lock In.
+#
+# Netlify is the CI/CD: it installs, runs the quality gate, builds, and deploys
+# on every push. The build command fails the deploy if lint, type-check, or the
+# unit/component tests fail, so broken code never ships. The app is a single
+# screen with no client-side routing, so no SPA redirect rule is needed.
+
+[build]
+  command = "pnpm lint && pnpm test && pnpm build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"

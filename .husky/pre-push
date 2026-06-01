@@ -1,0 +1,3 @@
+# Run type-check and unit tests before code leaves your machine.
+pnpm typecheck
+pnpm test
