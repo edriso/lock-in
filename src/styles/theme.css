@@ -1,0 +1,429 @@
+/* Lock In theme and layout.
+   Ported faithfully from the prototype: dark "focus mode" by default, electric
+   green accent, a warm danger tone for the away/broken state. Space Grotesk for
+   UI and big numbers, IBM Plex Mono for the countdown and tracked labels. */
+@import 'tailwindcss';
+
+/* Expose the core tokens to Tailwind utilities too (v4 @theme). */
+@theme {
+  --color-bg: #0f1117;
+  --color-surface: #171a22;
+  --color-accent: #58e08c;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+:root {
+  --radius: 18px;
+  --accent: #58e08c;
+  --on-accent: #08130c;
+  --danger: #e0795a;
+  --display: 'Space Grotesk', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Dark focus-mode (default). */
+[data-theme='dark'] {
+  --bg: #0f1117;
+  --surface: #171a22;
+  --surface-2: #20242e;
+  --line: rgba(180, 220, 200, 0.1);
+  --text: #e9efe9;
+  --text-dim: #9aa6a0;
+  --text-faint: #67726c;
+  --accent-soft: color-mix(in oklab, var(--accent) 16%, transparent);
+  --accent-line: color-mix(in oklab, var(--accent) 32%, var(--line));
+  color-scheme: dark;
+}
+
+/* Light. */
+[data-theme='light'] {
+  --bg: #f4f6f4;
+  --surface: #ffffff;
+  --surface-2: #eaeee9;
+  --line: rgba(20, 40, 30, 0.11);
+  --text: #141a16;
+  --text-dim: #54605a;
+  --text-faint: #8a958e;
+  --on-accent: #08130c;
+  --accent-soft: color-mix(in oklab, var(--accent) 18%, transparent);
+  --accent-line: color-mix(in oklab, var(--accent) 34%, var(--line));
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+}
+::selection {
+  background: var(--accent-soft);
+}
+button {
+  font-family: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.li-app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.li-main {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.li-col {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 20px calc(60px + env(safe-area-inset-bottom));
+}
+
+.li-themebtn {
+  position: fixed;
+  top: 18px;
+  inset-inline-end: 18px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.li-themebtn:hover {
+  color: var(--text-dim);
+}
+
+.li-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  margin-bottom: 30px;
+}
+.li-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 22px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+/* Streak */
+.li-streak {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.li-streak-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 52px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.li-streak-label {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+.li-chain {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.li-chain-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.li-chain-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--on-accent);
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+.li-chain-dot.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 16px color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.li-chain-dot.is-today:not(.is-on) {
+  border: 1.5px dashed var(--accent-line);
+}
+.li-chain-day span {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+/* Console */
+.li-console {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 16px;
+}
+.li-durs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.li-dur {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 12px 0;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 19px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.li-dur span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.li-dur.is-on {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.li-dur:hover {
+  border-color: var(--accent-line);
+}
+.li-field {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 13px;
+  padding: 13px 15px;
+  font-size: 14.5px;
+  font-family: var(--display);
+  outline: none;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+.li-field::placeholder {
+  color: var(--text-faint);
+}
+.li-field:focus {
+  border-color: var(--accent-line);
+}
+.li-console-sub {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-top: 14px;
+  text-transform: uppercase;
+}
+
+/* Stats */
+.li-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.li-stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+}
+.li-stat-num {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+}
+.li-stat-num span {
+  font-size: 13px;
+  color: var(--text-faint);
+  margin-inline-start: 3px;
+}
+.li-stat-label {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 7px;
+}
+
+/* Log */
+.li-log {
+  margin-bottom: 26px;
+}
+.li-log-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 13px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.li-log-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--text-faint);
+}
+.li-log-dot.is-clean {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.li-log-main {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.li-log-meta {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.li-foot {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-faint);
+  text-align: center;
+  margin: 0;
+}
+
+/* Primitives */
+.li-iconbtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.li-iconbtn:hover {
+  color: var(--accent);
+}
+.li-tap {
+  transition: transform 0.1s ease;
+}
+.li-tap:active {
+  transform: scale(0.96);
+}
+.li-btn {
+  transition:
+    filter 0.15s ease,
+    transform 0.1s ease;
+}
+.li-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+@keyframes lipulse {
+  0%,
+  100% {
+    transform: scale(0.97);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+.li-pulse {
+  animation: lipulse 4s ease-in-out infinite;
+}
+@keyframes lifade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.li-fade {
+  animation: lifade 0.3s ease both;
+}
+.li-veil {
+  animation: liveil 0.3s ease both;
+}
+@keyframes liveil {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
