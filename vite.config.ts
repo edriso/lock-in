@@ -6,6 +6,7 @@ import { defineConfig } from 'vitest/config';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/lock-in/',
   plugins: [
     react(),
     tailwindcss(),
