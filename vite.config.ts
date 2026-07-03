@@ -20,7 +20,8 @@ export default defineConfig({
         theme_color: '#0f1117',
         background_color: '#0f1117',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/lock-in/',
+        scope: '/lock-in/',
         icons: [
           {
             src: 'icon.svg',
